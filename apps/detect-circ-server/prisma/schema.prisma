@@ -1,0 +1,28 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Image {
+  id              String      @id @default(cuid())
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  url             String?
+  detectionResult Json?
+  uploadedAt      DateTime?
+  detections      Detection[]
+}
+
+model Detection {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  details     Json?
+  circleCount Int?
+  image       Image?   @relation(fields: [imageId], references: [id])
+  imageId     String?
+}
